@@ -1,5 +1,13 @@
 package cc.softwarefactory.lokki.android.espresso;
 
+import android.app.Instrumentation;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+
+import cc.softwarefactory.lokki.android.LocationService;
+import cc.softwarefactory.lokki.android.MainActivity;
+import cc.softwarefactory.lokki.android.MainApplication;
 import cc.softwarefactory.lokki.android.R;
 import cc.softwarefactory.lokki.android.espresso.utilities.TestUtils;
 
@@ -38,6 +46,18 @@ public class SettingsScreenTest extends MainActivityBaseTest {
         }
     }
 
+    public void testVisibilityCanBeSetUsingMenu() {
+        enterSettingsScreen();
+
+    // Assumes it's set to 'Yes' by default
+        assertEquals(true, (boolean) MainApplication.visible);
+        onView(withId(R.id.spinner_visibility)).perform(click());
+        onView(withText(R.string.no)).perform(click());
+        assertEquals(false, (boolean) MainApplication.visible);
+        onView(withId(R.id.spinner_visibility)).perform(click());
+        onView(withText(R.string.yes)).perform(click());
+        assertEquals(true, (boolean) MainApplication.visible);
+    }
 
     public void testMapModesMenuOpensWhenClicked() {
         enterSettingsScreen();
